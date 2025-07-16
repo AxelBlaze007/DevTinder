@@ -1,0 +1,19 @@
+{
+  "name": "devtinder",
+  "version": "1.0.0",
+  "description": "A tinder for Developer",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [
+    "javascript",
+    "Express"
+  ],
+  "author": "Panna lal",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
