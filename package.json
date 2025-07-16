@@ -1,6 +1,7 @@
 {
   "name": "devtinder",
   "version": "1.0.0",
+  "type": "commonjs",
   "description": "A tinder for Developer",
   "main": "index.js",
   "scripts": {
@@ -14,6 +15,7 @@
   "author": "Panna lal",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
   }
 }
