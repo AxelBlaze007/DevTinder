@@ -17,13 +17,15 @@ app.post("/signUp", async (req, res) => {
   //   emailId: "pana3g@gmail.com",
   // };
 
-  const user = new User(req.body);
-
   try {
+    User.init();
+    const user = new User(req.body);
     await user.save();
-    res.send("User saved successfully");
+
+    res.send("User data; added successfully");
   } catch (err) {
-    res.status(400).send("Error saving the user");
+    console.log("SignUp error", err);
+    res.status(400).send("Error" + err.message);
   }
 });
 
@@ -59,16 +61,26 @@ app.delete("/user", async (req, res) => {
 });
 
 // Updating the Document
-app.patch("/user", async (req, res) => {
-  const userId = req.body.userId;
+app.patch("/user/:userId", async (req, res) => {
+  const userId = req.params.userId;
   const data = req.body;
 
   try {
+    const ALLOWED = ["displayPic", "about", "age", "skills"];
+
+    const isAllowed = Object.keys(data).every((k) => ALLOWED.includes(k));
+    if (!isAllowed) {
+      throw new Error("Not Allowed to update");
+    }
+    if (data?.skills.length > 10) {
+      throw new Error("Skills cannot be more than 10");
+    }
+
     const user = await User.findByIdAndUpdate(userId, data);
 
     res.send("Updated Successfully");
   } catch (error) {
-    res.send("Something went wrong");
+    res.status(400).send("Something went wrong " + error.message);
   }
 });
 
