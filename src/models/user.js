@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
+const validator = require("validator");
+const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
   {
@@ -33,9 +35,20 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       unique: true,
       trim: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Invalid Email");
+        }
+      },
     },
     password: {
       type: String,
+      required: true,
+      validate: function (value) {
+        if (!validator.isStrongPassword(value)) {
+          throw new Error("Password is not strong");
+        }
+      },
     },
     gender: {
       type: String,
@@ -62,6 +75,14 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 userSchema.plugin(uniqueValidator);
+
+userSchema.methods.getJWT = async function () {
+  const user = this;
+  const token = await jwt.sign({ _id: user._id }, "JaiShreeRam", {
+    expiresIn: "1d",
+  });
+  return token;
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
